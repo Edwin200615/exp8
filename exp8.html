@@ -1,0 +1,542 @@
+```html
+<!DOCTYPE html>
+<html lang="en" ng-app="techApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tech Product Showcase</title>
+
+    <!-- AngularJS CDN -->
+    <script src="https://code.angularjs.org/1.6.9/angular.js"></script>
+
+    <style>
+
+/* GENERAL STYLING */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f1f5f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* HEADER */
+
+header {
+    background: linear-gradient(135deg, #0d47a1, #2196f3);
+    color: white;
+    text-align: center;
+    padding: 30px;
+}
+
+header h1 {
+    font-size: 35px;
+}
+
+header p {
+    font-size: 18px;
+}
+
+/* NAVIGATION */
+
+nav {
+    background: #102a43;
+    padding: 15px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 15px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #64ffda;
+}
+
+/* SECTIONS */
+
+section {
+    background: white;
+    width: 90%;
+    max-width: 1000px;
+    margin: 25px auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+h2 {
+    color: #1565c0;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h3 {
+    color: #0d47a1;
+    margin: 15px 0;
+}
+
+/* INPUT FIELDS */
+
+input, textarea, select {
+    padding: 12px;
+    margin: 10px 0;
+    width: 100%;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+/* BUTTONS */
+
+button {
+    background: #1565c0;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    margin: 8px 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+button:hover {
+    background: #0d47a1;
+}
+
+/* REVIEW LIST */
+
+ul {
+    margin-top: 15px;
+    list-style: none;
+}
+
+li {
+    background: #e3f2fd;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 7px;
+}
+
+.remove {
+    float: right;
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/* CALCULATOR */
+
+.calculator {
+    text-align: center;
+}
+
+.calculator input {
+    width: 30%;
+    display: inline-block;
+}
+
+.calculator select {
+    width: 100px;
+}
+
+.res {
+    background: #e8f5e9;
+    color: #1b5e20;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+/* PRODUCT LIST */
+
+.product-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* FOOTER */
+
+footer {
+    background: #102a43;
+    color: white;
+    text-align: center;
+    padding: 25px;
+    margin-top: 30px;
+}
+
+/* RESPONSIVE DESIGN */
+
+@media(max-width: 768px) {
+
+    header h1 {
+        font-size: 25px;
+    }
+
+    nav a {
+        display: inline-block;
+        margin: 5px;
+    }
+
+    section {
+        width: 95%;
+        padding: 18px;
+    }
+
+    .calculator input {
+        width: 100%;
+    }
+
+    .calculator select {
+        width: 100%;
+    }
+
+}
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+
+    <h1>TECH PRODUCT SHOWCASE</h1>
+
+    <p>Explore the Latest Technology Products</p>
+
+</header>
+
+<!-- NAVIGATION -->
+
+<nav>
+
+    <a href="#home">Home</a>
+
+    <a href="#reviews">Reviews</a>
+
+    <a href="#calculator">Calculator</a>
+
+    <a href="#products">Products</a>
+
+</nav>
+
+<!-- HOME SECTION -->
+
+<section id="home">
+
+    <h2>Welcome to Tech Product Showcase</h2>
+
+    <p style="text-align:center;">
+
+        Discover the latest Smartphones, Laptops,
+        Smartwatches, Headphones and modern gadgets.
+
+    </p>
+
+</section>
+
+
+<!-- 1. CUSTOMER PRODUCT REVIEWS -->
+
+<section id="reviews" ng-controller="reviewCtrl">
+
+    <h2>1. Customer Product Reviews</h2>
+
+    <h3>Post Your Review</h3>
+
+    <textarea
+        ng-model="txtcomment"
+        placeholder="Write your product review here...">
+    </textarea>
+
+    <br>
+
+    <button ng-click="addReview()">
+
+        Post Review
+
+    </button>
+
+    <h3>Customer Reviews</h3>
+
+    <ul>
+
+        <li ng-repeat="c in comments track by $index">
+
+            {{ c }}
+
+            <a href=""
+               class="remove"
+               ng-click="remove($index)">
+
+                Delete
+
+            </a>
+
+        </li>
+
+    </ul>
+
+    <p ng-if="comments.length == 0">
+
+        No reviews available. Be the first to review!
+
+    </p>
+
+</section>
+
+
+<!-- 2. TECH PRODUCT BILL CALCULATOR -->
+
+<section id="calculator"
+         ng-controller="calcCtrl">
+
+    <h2>2. Tech Product Bill Calculator</h2>
+
+    <p style="text-align:center;">
+
+        Calculate the total price of your technology products.
+
+    </p>
+
+    <div class="calculator">
+
+        <input type="number"
+               ng-model="a"
+               placeholder="Enter First Price">
+
+        <select ng-model="op">
+
+            <option value="+">+</option>
+
+            <option value="-">-</option>
+
+            <option value="*">*</option>
+
+            <option value="/">/</option>
+
+        </select>
+
+        <input type="number"
+               ng-model="b"
+               placeholder="Enter Second Price">
+
+        <p class="res">
+
+            Total Amount: ₹{{ result() }}
+
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- 3. TECH PRODUCT ORDER LIST -->
+
+<section id="products"
+         ng-controller="orderCtrl">
+
+    <h2>3. Tech Product Order List</h2>
+
+    <p>
+
+        Add your favourite technology products to the shopping list.
+
+    </p>
+
+    <input ng-model="item"
+           placeholder="Enter Product Name">
+
+    <button ng-click="add()">
+
+        Add Product
+
+    </button>
+
+    <h3>Selected Products</h3>
+
+    <ul class="product-list">
+
+        <li ng-repeat="t in items track by $index">
+
+            {{ t }}
+
+            <a href=""
+               class="remove"
+               ng-click="remove($index)">
+
+                Delete
+
+            </a>
+
+        </li>
+
+    </ul>
+
+    <p ng-if="items.length == 0">
+
+        No products added yet.
+
+    </p>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <p>Done By: EDWIN A</p>
+
+    <p>Register Number: URK24CS1201</p>
+
+    <p>Exercise No: 8</p>
+
+    <p>Tech Product Showcase</p>
+
+    <p>&copy; 2026 Tech Product Showcase</p>
+
+</footer>
+
+
+<!-- ANGULARJS PROGRAMS -->
+
+<script>
+
+/* MAIN ANGULARJS APPLICATION */
+
+var app = angular.module("techApp", []);
+
+
+/* 1. CUSTOMER PRODUCT REVIEWS */
+
+app.controller("reviewCtrl", function($scope) {
+
+    $scope.comments = [];
+
+    $scope.addReview = function() {
+
+        if ($scope.txtcomment &&
+            $scope.txtcomment.trim() != "") {
+
+            $scope.comments.push($scope.txtcomment);
+
+            $scope.txtcomment = "";
+
+        }
+
+    };
+
+    $scope.remove = function(index) {
+
+        $scope.comments.splice(index, 1);
+
+    };
+
+});
+
+
+/* 2. TECH PRODUCT BILL CALCULATOR */
+
+app.controller("calcCtrl", function($scope) {
+
+    $scope.op = "+";
+
+    $scope.result = function() {
+
+        var a = Number($scope.a || 0);
+
+        var b = Number($scope.b || 0);
+
+        if ($scope.op == "+") {
+
+            return a + b;
+
+        }
+
+        if ($scope.op == "-") {
+
+            return a - b;
+
+        }
+
+        if ($scope.op == "*") {
+
+            return a * b;
+
+        }
+
+        if ($scope.op == "/") {
+
+            if (b == 0) {
+
+                return "Cannot divide by zero";
+
+            }
+
+            return a / b;
+
+        }
+
+    };
+
+});
+
+
+/* 3. TECH PRODUCT ORDER LIST */
+
+app.controller("orderCtrl", function($scope) {
+
+    $scope.items = [];
+
+    $scope.add = function() {
+
+        if ($scope.item &&
+            $scope.item.trim() != "") {
+
+            $scope.items.push($scope.item);
+
+            $scope.item = "";
+
+        }
+
+    };
+
+    $scope.remove = function(index) {
+
+        $scope.items.splice(index, 1);
+
+    };
+
+});
+
+</script>
+
+</body>
+
+</html>
+```
